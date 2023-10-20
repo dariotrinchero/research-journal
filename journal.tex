@@ -1,0 +1,60 @@
+\documentclass{journal}
+
+%-----------------------------------------------------------------------------------------
+% Custom definitions / imports
+%-----------------------------------------------------------------------------------------
+
+% TODO add custom definitions & imports here
+
+%-----------------------------------------------------------------------------------------
+% Journal setup
+%-----------------------------------------------------------------------------------------
+
+\name{Research Journal}
+\project{PhD Journalism}
+\subject{The use of LaTeX typesetting for journalism} % only in PDF file metadata
+\author{Alice Atwood \and Bob Benston}
+
+%-----------------------------------------------------------------------------------------
+% Front matter
+%-----------------------------------------------------------------------------------------
+
+% The following line mocks current date so that template compiles to a
+% consistent output for demonstration purposes.
+\SetDate[10/01/2023] % TODO DELETE THIS LINE
+
+\begin{document}
+
+% Title page
+\maketitle
+
+% Optional table of contents; two-column layout unless "widetoc" class option given.
+\tableofcontents
+
+% Optional "Calendar" section with links to journal entries & current day highlighted.
+\calendar[11-01]{2022}{2025} % syntax is \calendar[first-day]{start-year}{end-year}
+% TODO add option to change end day
+
+% Optional "Planned Timeline" section with Gantt chart(s) from figures/gantt.tex.
+\timelines % \timelines[path] gives custom path to Gantt chart definitions
+
+% Optional "Open Issues" list of unresolved questions & TODOs (see example entries for
+% syntax of adding & resolving issues).
+\listofissues
+
+%-----------------------------------------------------------------------------------------
+% Entries
+%-----------------------------------------------------------------------------------------
+
+% Set starting date for journal entries; date here should be day BEFORE first entry.
+\logstart{2022-12-02} % use yyyy-mm-dd format
+
+\logday
+Add entries with \verb|\logday|. Note that days are automatically
+\hyperref[2022-12-03]{labeled} by their date. You can skip days using
+\verb|\logday[<days>]|.
+
+% TODO add entries showing off features
+
+\bibliography{references}
+\end{document}

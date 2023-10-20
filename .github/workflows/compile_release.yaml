@@ -1,0 +1,43 @@
+name: Build & release
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-release:
+    name: Build PDF & update release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout journal repo
+        uses: actions/checkout@v3
+
+      - name: Compile PDF
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: journal.tex
+
+      - name: Generate front page preview
+        run: |
+          sudo apt-get install poppler-utils
+          pdftoppm -jpeg -f 3 -l 6 journal.pdf journal
+        shell: sh
+
+      - name: Update latest release with new PDF
+        uses: IsaacShelton/update-existing-release@v1.3.3
+        with:
+          token: ${{ github.token }}
+          release: "Latest journal template PDF"
+          tag: "latest"
+          replace: true
+          files: >
+            journal.pdf
+            journal-3.jpg
+            journal-4.jpg
+            journal-5.jpg
+            journal-6.jpg
+          body: >
+            This release contains the latest journal template compiled
+            to PDF and image previews of some of the pages.

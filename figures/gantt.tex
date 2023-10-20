@@ -1,0 +1,46 @@
+%-----------------------------------------------------------------------------------------
+% This file defines the Gantt chart(s) created by \timelines command.
+%
+% You can add as many charts as you like here. They will all appear after each other in
+% the "Planned Timeline" section wherever the \timelines command is invoked. Each chart
+% can have an optional subsection heading.
+%
+% Charts use pgfgantt (https://ctan.org/pkg/pgfgantt), and so support its syntax &
+% customization. The following additional shortcut commands are defined by the journal
+% class:
+%
+% 	\phase{name}{start-date}{end-date} ------------------ project phase
+%	\milestone{name}{date} ------------------------------ project deliverable / milestone
+%	\task[label]{name}{start-date}{end-date} ------------ project task; starred version
+%														  links to previous task
+%	\link{label1}{label2} ------------------------------- create link between tasks with
+%														  given labels
+%-----------------------------------------------------------------------------------------
+
+% TODO modify this chart to reflect your project timeline
+\begin{gantt}[Overview]{2022-11}{2025-12} % optional argument creates subsection heading
+	% defining chart rows
+	\phase{lit review}{2022-12}{2023-12}\\ % \\ moves to the next row in the chart
+	\task{topic 1}{2022-12}{2023-03}
+	\phase{research}{2024-01}{2025-01}\\
+	\task[topic2]{topic 2}{2023-02}{2023-04}
+	\task[research1]{research goal 1}{2024-01}{2024-07}\\
+	\task*[research2]{research goal 2}{2024-07}{2025-01}
+	\task[topic3]{topic 3}{2023-03}{2023-07}\\
+	\task*{topic 4}{2023-06}{2023-09}\\
+	\task*[topic4]{topic 4}{2023-08}{2023-12}
+	\phase{writing}{2024-09}{2025-10}\\
+	\milestone{reading}{2023-12}
+	\task[paper1]{paper 1}{2024-09}{2024-12}\\
+	\task*[paper2]{paper 2}{2025-02}{2025-04}\\
+	\task*[thesis]{thesis}{2025-04}{2025-10}
+	\milestone{1st paper}{2024-12}\\
+	\milestone{2nd paper}{2025-04}
+	\milestone{PhD}{2025-10}
+
+	% additional links
+	\link{topic2}{topic3}
+	\link[link type=f-s]{topic4}{research1}
+	\link[link type=rdldr*, link bulge 2=2.5, link mid=1/8]{research1}{paper1}
+	\link[link type=rdldr*, link bulge 2=5.5, link mid=1/8]{research2}{paper2}
+\end{gantt}

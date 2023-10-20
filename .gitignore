@@ -1,3 +1,10 @@
+## Output PDF
+journal*.pdf
+
+## tocloft package auxiliary files:
+*.iss
+*.opt
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
