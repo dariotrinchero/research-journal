@@ -9,9 +9,17 @@
 % Class options
 %-----------------------------------------------------------------------------------------
 
-% TODO actually use this option
+% [widetoc]:
+% 		use wide (spanning 2 columns) layout for table-of-contents; default is to break
+%		table into 2 single columns
 \newif\if@widetoc
 \DeclareOption{widetoc}{\@widetoctrue}
+
+% [raggedright]:
+%		use ragged-right alignment (with ragged2e package for hyphenation
+% 		support); default is to justify text
+\newif\if@raggedright
+\DeclareOption{raggedright}{\@raggedrighttrue}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{extarticle}}
 \ProcessOptions\relax
@@ -77,7 +85,17 @@
 % General styling
 %-----------------------------------------------------------------------------------------
 
+% Layout
 \setlength{\parindent}{0pt}
+\if@raggedright
+	\RequirePackage[document]{ragged2e} % ragged-right layout with hyphenation
+	% Restore original functionality of \\ and \newline, as per
+	% (https://tex.stackexchange.com/a/198578):
+	% TODO this does not seem to help...
+	\let\@gnewline\@raggedtwoe@saved@gnewline
+	\let\\\@raggedtwoe@savedcr
+\fi
+
 
 % Hyperlinks & bookmarks
 \hypersetup{
@@ -100,13 +118,14 @@
 }
 
 % Table of contents & numbering
-\renewcommand{\tableofcontents}{% two column t.o.c.
+\renewcommand{\tableofcontents}{%
 	\newpage%
+	\if@widetoc\onecolumn\fi%
 	\pdfbookmark[chapter]{\contentsname}{toc}
-	\chapter*{\contentsname
-		\@mkboth{%
-			\MakeUppercase\contentsname}{\MakeUppercase\contentsname}}%
-			\@starttoc{toc}%
+	\chapter*{\contentsname\@mkboth{\MakeUppercase\contentsname}%
+		{\MakeUppercase\contentsname}}%
+	\@starttoc{toc}%
+	\if@widetoc\twocolumn\fi%
 }
 \setlength{\cftsecindent}{1.5em}
 \setlength{\cftsubsecindent}{3em}
@@ -143,6 +162,7 @@
 		\SetDate[##3/##2/##1] % format dd/mm/yyyy required by \SetDate
 	}%
 	\parsedate#1\endparse
+	\global\advance\day-1\FixDate% decrement to cancel increment of first \logday
 	\SaveDate[\logstartday]% remember start date for use in \logday definition
 }
 
@@ -200,7 +220,7 @@
 \newlistof{optionalissues}{opt}{}
 \renewcommand{\listofissues}{\begingroup
 	\onecolumn
-	\chapter{Open Issues}
+	\chapter{Open Issues}\label{ch:issues}
 	\tocfile{High priority}{iss}
 	\tocfile{Low priority}{opt}
 	\twocolumn
@@ -248,6 +268,20 @@
 %		\ans[q:how] No ----------------------- answer
 %		    ^^^^^^^ -------------------------- optional ref to \label-ed question
 %	\end{tasklist}
+%
+% The issue list entry line (enclosed in ") is optional, defaulting to the empty string,
+% but it is nice to see a preview of the issue in its issue list entry.
+%
+% The combination ?* on an \ex or \read task marks it as having been completed on a
+% date after it appears. Visually this ticks it in orange instead of blue. The idea is
+% that you can use \ex & \read either as a RECORD of daily reading / exericises, or as
+% a more specific TO-DO. So the intended semantics are:
+%
+%	\read*  ------------ done on current day
+%	\read   ------------ to do later
+%	\read?  ------------ to do later (low-priority)
+%	\read?* ------------ to-do completed (on a day after where it appears)
+%
 \newenvironment{tasklist}{
 \newcommand{\issue}[6]{%
 	\item[##3\IfBooleanTF##2{\IfBooleanT##1{\color{Orange}}$^\checkmark$}{\IfBooleanT##1{$^?$}}]%
@@ -291,6 +325,7 @@
 %	\yearcalendar{2015} ---------- entire 2015 calendar
 %	\yearcalendar[03-28]{2015} --- 2015 calendar starting Mar 28 2015
 %				  ^^^^^ ---------- format mm-dd required
+% TODO add option to change end day
 \newcommand{\yearcalendar}[2][01-01]{%
 	\section*{#2}
 	\footnotesize\color{CadetBlue!15!black}
@@ -321,7 +356,7 @@
 %			  ^^^^^ ---------------- format mm-dd required
 \newcommand{\calendar}[3][01-01]{%
 	\onecolumn%
-	\chapter{Calendar}
+	\chapter{Calendar}\label{ch:calendar}
 	\foreach \n in {#2,...,#3}{
 		\ifthenelse{\n=#2}{\yearcalendar[#1]{\n}}{\yearcalendar{\n}}
 	}

@@ -1,10 +1,18 @@
-\documentclass{journal}
+%=========================================================================================
+% This is journal.tex, an example of using the journal.cls class, written by
+% Dario Trinchero (dario.trinchero@pm.me).
+%=========================================================================================
+
+\documentclass[% see journal.cls for more documentation on class options
+	raggedright, % ragged-right alignment (instead of justified)
+	%widetoc, % wide table-of-contents (instead of 2-column)
+]{journal}
 
 %-----------------------------------------------------------------------------------------
 % Custom definitions / imports
 %-----------------------------------------------------------------------------------------
 
-% TODO add custom definitions & imports here
+% TODO add your custom definitions & imports here
 
 %-----------------------------------------------------------------------------------------
 % Journal setup
@@ -24,37 +32,146 @@
 \SetDate[10/01/2023] % TODO DELETE THIS LINE
 
 \begin{document}
-
-% Title page
 \maketitle
 
-% Optional table of contents; two-column layout unless "widetoc" class option given.
-\tableofcontents
+% optional table of contents
+\tableofcontents % 2-column layout unless "widetoc" class option given
 
-% Optional "Calendar" section with links to journal entries & current day highlighted.
+% optional calendar with links to entries & current day highlighted
 \calendar[11-01]{2022}{2025} % syntax is \calendar[first-day]{start-year}{end-year}
-% TODO add option to change end day
 
-% Optional "Planned Timeline" section with Gantt chart(s) from figures/gantt.tex.
+% optional "Planned Timeline" section with Gantt chart(s) from figures/gantt.tex
 \timelines % \timelines[path] gives custom path to Gantt chart definitions
 
-% Optional "Open Issues" list of unresolved questions & TODOs (see example entries for
-% syntax of adding & resolving issues).
-\listofissues
+% optional list of unresolved questions & TODOs
+\listofissues % see entries below for syntax of adding & resolving issues
 
 %-----------------------------------------------------------------------------------------
 % Entries
 %-----------------------------------------------------------------------------------------
 
-% Set starting date for journal entries; date here should be day BEFORE first entry.
-\logstart{2022-12-02} % use yyyy-mm-dd format
+\logstart{2022-12-23} % date for first entry; use yyyy-mm-dd format
+
+\logday % add entry
+Add entries with \verb|\logday|. You can skip days using \verb|\logday[<days>]|.
+Days are automatically \hyperref[2022-12-02]{labeled} by their ({\tt yyyy-mm-dd}) date,
+and there are also builtin labels for the \hyperref[ch:calendar]{calendar},
+\hyperref[ch:timeline]{timeline}, and \hyperref[ch:issues]{issues} chapters.
+
+%-----------------------------------------------------------------------------------------
+
+\logday[2] % add entry, skipping 2 days between this & last entry
+Here is a checklist:
+\begin{checklist}
+	\item* Checked item 1
+	\item* Checked item 2
+	\item! Crossed item
+	\item Unchecked item
+\end{checklist}
+
+%-----------------------------------------------------------------------------------------
+
+\logday[1]
+A core feature of this journal is the {\tt tasklist} envionment:
+% The tasklist is a fancy 'description' environment. You can use a number of commands
+% inside a tasklist, namely \todo, \qstn, \ans, \ex, and \read. Here is an overview of
+% the syntax:
+%
+%	\begin{tasklist}
+%		\todo[le18a][\#~2] "Be" attentive -- unresolved todo
+%		     ^^^^^^^^^^^^^ ----------------- optional citation & suffix
+%                          ^^^^ ------------ issue list entry line content
+%		\todo*[le18a][\#~2] "Be"
+%		     ^ ----------------------------- 'resolved' (ticked & removed from issue list)
+%		\todo?[le18a][\#~2] "Be"
+%		     ^ ----------------------------- 'low-priority' (separate issue list)
+%
+%		\qstn*[ul12b] "How?" --------------- question: same arguments as \todo
+%
+%		\ex[le18a][1,3--6] "ez." ----------- exercise task: same arguments as \todo
+%		\ex?*[le18a][1,3--6] "ez."
+%		   ^^ ------------------------------ special combination: see below
+%		\read[le18a][1,5--8] ":)" ---------- reading task: same arguments as \ex
+%
+%		\ans[q:how] No --------------------- answer
+%		    ^^^^^^^ ------------------------ optional ref to \label-ed question
+%	\end{tasklist}
+%
+% The issue list entry line (enclosed in ") is optional, defaulting to the empty string,
+% but it is nice to see a preview of the issue in its issue list entry. It is
+% automatically truncated, so don't worry about its length.
+%
+% The combination ?* on an \ex or \read task marks it as having been completed on a
+% date after it appears. Visually this ticks it in orange instead of blue. The idea is
+% that you can use \ex & \read either as a RECORD of daily reading / exericises, or as
+% a more specific TO-DO. So the intended semantics are:
+%
+%	\read*  ------------ done on current day
+%	\read   ------------ to do later
+%	\read?  ------------ to do later (low-priority)
+%	\read?* ------------ to-do completed (on a day after where it appears)
+%
+\begin{tasklist}
+	\todo* "Learn how to use tasklists."
+	\todo? "Tick this item off."
+	\read "This example journal."
+	\read*[baez1994gauge][pp.~10--26] "You can refer to citations."
+	\ex[baez1994gauge][\#~1--3] "Exercises work just like reading tasks."
+
+	% Note: the label is best put after the quoted section, or otherwise in the same
+	% paragraph as the \qstn command.
+	\qstn[baez1994gauge] "Why did I use this book as an example?" \label{qstn:why}
+		It just makes no sense.
+
+	% Note: you can click the arrow which is typeset by this answer to jump to the
+	% question; the question can have multiple partial answers, so is not marked as
+	% 'resolved' until you do so manually.
+	\ans[qstn:why] I probably just copied a piece of my actual reference list.
+\end{tasklist}
+
+%-----------------------------------------------------------------------------------------
 
 \logday
-Add entries with \verb|\logday|. Note that days are automatically
-\hyperref[2022-12-03]{labeled} by their date. You can skip days using
-\verb|\logday[<days>]|.
+\begin{theorem}
+The following theorem environments are set up: {\tt theorem, definition, lemma,
+proposition, corollary}
+\end{theorem}
+\begin{proof}
+Try them!
+\end{proof}
 
-% TODO add entries showing off features
+%-----------------------------------------------------------------------------------------
+
+\logday[1]
+In case you missed it in the source code, there is a small idiosyncrasy with
+how we use \verb|\read| and \verb|\ex| both as daily \emph{records} of completed
+reading / exercises, and as specialized \emph{to-do}s.
+
+\vspace{1em}
+As unresolved to-dos, they can appear in the high- and low-priority forms:
+\begin{tasklist}
+	\read "High priority reading to-do."
+	\read? "Low priority reading to-do."
+\end{tasklist}
+
+There are two distinct 'ticked' forms: one denotes reading completed on the same day as it
+appears, while the other denotes a reading to-do that was resolved on a later date than
+that where it appears:
+\begin{tasklist}
+	\read* Log of reading done today.
+	\read?* Reading to-do that has been completed on a date after today.
+\end{tasklist}
+
+{\color{black!20}\hrule}
+
+\vspace{1em}
+The next entry will proceed a page break since it is in the new year.
+
+%-----------------------------------------------------------------------------------------
+
+\logday
+That's all of the important bits. Enjoy --- I hope you get as much utility from this
+template as I did!
 
 \bibliography{references}
 \end{document}

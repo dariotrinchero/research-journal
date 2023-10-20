@@ -9,7 +9,14 @@ as a place for recording daily *work*, tracking *progress*, outstanding *tasks*,
 
 ## Showcase
 
-TODO include photos
+Here are some screenshots showing off the basic layout and some key features:
+
+<p float="left">
+<img src="https://github.com/dariotrinchero/research-journal/releases/download/latest/journal-3.jpg" width="48%">
+<img src="https://github.com/dariotrinchero/research-journal/releases/download/latest/journal-4.jpg" width="48%">
+<img src="https://github.com/dariotrinchero/research-journal/releases/download/latest/journal-5.jpg" width="48%">
+<img src="https://github.com/dariotrinchero/research-journal/releases/download/latest/journal-6.jpg" width="48%">
+</p>
 
 ## Requirements
 
